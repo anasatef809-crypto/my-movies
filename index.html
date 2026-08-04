@@ -1,308 +1,137 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إيجي أفلام - منصة المشاهدة المجانية</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { 
-            background-color: #141414; 
-            color: #fff; 
-            font-family: system-ui, -apple-system, sans-serif; 
-            padding: 20px 15px; 
-        }
-        
-        header { 
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px; 
-            border-bottom: 2px solid #e50914; 
-            padding-bottom: 15px; 
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        h1 { color: #e50914; font-size: 22px; font-weight: bold; cursor: pointer; }
-        
-        .search-box input {
-            background: #333;
-            border: 1px solid #444;
-            padding: 8px 12px;
-            border-radius: 20px;
-            color: #fff;
-            outline: none;
-            font-size: 13px;
-            width: 160px;
-        }
-
-        /* شريط التصنيفات */
-        .categories {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            overflow-x: auto;
-            padding-bottom: 5px;
-        }
-        .cat-btn {
-            background: #222;
-            color: #aaa;
-            border: 1px solid #444;
-            padding: 6px 14px;
-            border-radius: 15px;
-            font-size: 12px;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: 0.3s;
-        }
-        .cat-btn.active, .cat-btn:hover {
-            background: #e50914;
-            color: #fff;
-            border-color: #e50914;
-        }
-
-        /* مشغل الفيديو */
-        .player-section {
-            display: none;
-            max-width: 900px;
-            margin: 0 auto 30px auto;
-            background: #222;
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(229, 9, 20, 0.4);
-        }
-        .player-section h2 { margin-bottom: 12px; font-size: 18px; color: #fff; }
-        
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            border-radius: 8px;
-            background: #000;
-        }
-        .video-container iframe {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
-        }
-
-        .close-btn {
-            background: #e50914; color: #fff; border: none; padding: 8px 18px; 
-            border-radius: 5px; cursor: pointer; margin-top: 12px; font-weight: bold;
-            font-size: 13px;
-        }
-
-        /* شبكة الأفلام */
-        .movies-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .movie-card {
-            background: #222;
-            border-radius: 10px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        .poster-wrapper {
-            position: relative;
-            width: 100%;
-            padding-top: 145%;
-            background: #1a1a1a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .poster-wrapper img {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;
-        }
-        
-        /* بديل مرئي في حال لم تظهر الصورة يكتب اسم الفيلم بوضوح */
-        .poster-fallback {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
-            font-size: 14px;
-            font-weight: bold;
-            color: #fff;
-            background: linear-gradient(135deg, #2c3e50, #000);
-            z-index: 1;
-        }
-
-        .rating {
-            position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.85);
-            color: #ffc107; padding: 3px 6px; border-radius: 5px; font-size: 11px; font-weight: bold;
-            z-index: 3;
-        }
-
-        .movie-info { padding: 10px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
-        .movie-title { font-size: 13px; font-weight: bold; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .movie-meta { font-size: 11px; color: #aaa; margin-bottom: 10px; }
-        
-        .watch-btn {
-            background: #e50914; color: #fff; border: none; text-align: center;
-            padding: 7px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; width: 100%;
-        }
-        .watch-btn:hover { background: #b80710; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EgyMovies - موقع الأفلام</title>
+  <style>
+    body {
+      background-color: #0f172a;
+      color: #fff;
+      font-family: system-ui, -apple-system, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #38bdf8;
+      margin-bottom: 30px;
+    }
+    .movies-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 20px;
+      padding: 10px;
+    }
+    .movie-card {
+      background: #1e293b;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .movie-card img {
+      width: 100%;
+      height: 270px;
+      object-fit: cover;
+    }
+    .rating-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.75);
+      color: #facc15;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 0.85rem;
+    }
+    .movie-info {
+      padding: 12px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .movie-info h3 {
+      margin: 0 0 6px 0;
+      font-size: 1rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .movie-info p {
+      margin: 0 0 10px 0;
+      color: #94a3b8;
+      font-size: 0.85rem;
+    }
+    .watch-btn {
+      width: 100%;
+      background: #0284c7;
+      color: white;
+      border: none;
+      padding: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .watch-btn:hover {
+      background: #0369a1;
+    }
+  </style>
 </head>
 <body>
 
-    <header>
-        <h1 onclick="resetFilter()">🎬 إيجي أفلام</h1>
-        <div class="search-box">
-            <input type="text" id="searchInput" onkeyup="filterMovies()" placeholder="بحث عن فيلم...">
-        </div>
-    </header>
+  <h1>🎬 EgyMovies - أحدث الأفلام</h1>
 
-    <!-- شريط التصنيفات -->
-    <div class="categories">
-        <button class="cat-btn active" onclick="filterCategory('all', this)">الكل</button>
-        <button class="cat-btn" onclick="filterCategory('scifi', this)">خيال علمي</button>
-        <button class="cat-btn" onclick="filterCategory('action', this)">أكشن</button>
-        <button class="cat-btn" onclick="filterCategory('drama', this)">دراما</button>
-    </div>
+  <!-- الحاوية التي ستظهر فيها الأفلام -->
+  <div class="movies-grid" id="moviesContainer"></div>
 
-    <!-- مشغل الفيديو -->
-    <div id="playerSection" class="player-section">
-        <h2 id="videoTitle">جاري المشاهدة...</h2>
-        <div class="video-container">
-            <iframe id="mainIframe" src="" allowfullscreen></iframe>
-        </div>
-        <button class="close-btn" onclick="closePlayer()">إغلاق المشغل ✖</button>
-    </div>
+  <script>
+    const API_KEY = 'b744cb3f771d51f1cdfa3be751901eb4';
+    const BASE_URL = 'https://api.themoviedb.org/3';
+    const IMAGE_URL = 'https://image.tmdb.org/t/p/w500'; // تصحيح الرابط هنا
 
-    <!-- شبكة الأفلام -->
-    <div class="movies-grid" id="moviesGrid">
+    async function fetchMovies() {
+      try {
+        const response = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}&language=ar-SA`);
+        const data = await response.json();
+        displayMovies(data.results);
+      } catch (error) {
+        console.error('Error fetching movies:', error);
+      }
+    }
 
-        <!-- فيلم 1 -->
-        <div class="movie-card" data-category="scifi" data-title="inception">
-            <div class="poster-wrapper">
-                <div class="poster-fallback">Inception</div>
-                <img src="https://image.tmdb.org/t/p/w500/oYuLE1311o2R3B8R3S2L3y1a3s0.jpg" alt="Inception" onerror="this.style.display='none'">
-                <span class="rating">⭐ 8.8</span>
-            </div>
+    function displayMovies(movies) {
+      const container = document.getElementById('moviesContainer');
+      if (!container) return;
+      
+      container.innerHTML = '';
+
+      movies.forEach(movie => {
+        const posterPath = movie.poster_path ? `${IMAGE_URL}${movie.poster_path}` : 'https://via.placeholder.com/500x750?text=No+Image';
+        const rating = movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A';
+        const releaseYear = movie.release_date ? movie.release_date.split('-')[0] : '';
+
+        const movieCard = `
+          <div class="movie-card">
+            <div class="rating-badge">★ ${rating}</div>
+            <img src="${posterPath}" alt="${movie.title}" loading="lazy">
             <div class="movie-info">
-                <div class="movie-title">Inception</div>
-                <div class="movie-meta">2010 • خيال علمي</div>
-                <button class="watch-btn" onclick="playMovie('Inception', 'https://vidsrc.me/embed/movie?imdb=tt1375666')">مشاهدة الآن 🍿</button>
+              <h3>${movie.title}</h3>
+              <p>${releaseYear}</p>
+              <button class="watch-btn">مشاهدة الآن 🍿</button>
             </div>
-        </div>
+          </div>
+        `;
+        container.insertAdjacentHTML('beforeend', movieCard);
+      });
+    }
 
-        <!-- فيلم 2 -->
-        <div class="movie-card" data-category="action" data-title="the dark knight">
-            <div class="poster-wrapper">
-                <div class="poster-fallback">The Dark Knight</div>
-                <img src="https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6mEb398vKoE.jpg" alt="The Dark Knight" onerror="this.style.display='none'">
-                <span class="rating">⭐ 9.0</span>
-            </div>
-            <div class="movie-info">
-                <div class="movie-title">The Dark Knight</div>
-                <div class="movie-meta">2008 • أكشن</div>
-                <button class="watch-btn" onclick="playMovie('The Dark Knight', 'https://vidsrc.me/embed/movie?imdb=tt0468569')">مشاهدة الآن 🍿</button>
-            </div>
-        </div>
+    document.addEventListener('DOMContentLoaded', fetchMovies);
+  </script>
 
-        <!-- فيلم 3 -->
-        <div class="movie-card" data-category="drama" data-title="interstellar">
-            <div class="poster-wrapper">
-                <div class="poster-fallback">Interstellar</div>
-                <img src="https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg" alt="Interstellar" onerror="this.style.display='none'">
-                <span class="rating">⭐ 8.6</span>
-            </div>
-            <div class="movie-info">
-                <div class="movie-title">Interstellar</div>
-                <div class="movie-meta">2014 • دراما</div>
-                <button class="watch-btn" onclick="playMovie('Interstellar', 'https://vidsrc.me/embed/movie?imdb=tt0816692')">مشاهدة الآن 🍿</button>
-            </div>
-        </div>
-
-        <!-- فيلم 4 -->
-        <div class="movie-card" data-category="action" data-title="avengers: endgame">
-            <div class="poster-wrapper">
-                <div class="poster-fallback">Avengers: Endgame</div>
-                <img src="https://image.tmdb.org/t/p/w500/ulzhLuWrPK0331Y32K331yL1a0.jpg" alt="Avengers: Endgame" onerror="this.style.display='none'">
-                <span class="rating">⭐ 8.4</span>
-            </div>
-            <div class="movie-info">
-                <div class="movie-title">Avengers: Endgame</div>
-                <div class="movie-meta">2019 • أبطال خارقون</div>
-                <button class="watch-btn" onclick="playMovie('Avengers: Endgame', 'https://vidsrc.me/embed/movie?imdb=tt4154796')">مشاهدة الآن 🍿</button>
-            </div>
-        </div>
-
-    </div>
-
-    <script>
-        let currentCategory = 'all';
-
-        function playMovie(title, url) {
-            document.getElementById('videoTitle').innerText = "جاري مشاهدة: " + title;
-            var iframe = document.getElementById('mainIframe');
-            iframe.src = url;
-            document.getElementById('playerSection').style.display = 'block';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function closePlayer() {
-            var iframe = document.getElementById('mainIframe');
-            iframe.src = "";
-            document.getElementById('playerSection').style.display = 'none';
-        }
-
-        function filterCategory(category, btn) {
-            currentCategory = category;
-            
-            // تحديث الأزرار النشطة
-            let buttons = document.getElementsByClassName('cat-btn');
-            for(let b of buttons) b.classList.remove('active');
-            btn.classList.add('active');
-
-            applyFilters();
-        }
-
-        function filterMovies() {
-            applyFilters();
-        }
-
-        function applyFilters() {
-            let searchInput = document.getElementById('searchInput').value.toLowerCase();
-            let cards = document.getElementsByClassName('movie-card');
-
-            for (let i = 0; i < cards.length; i++) {
-                let card = cards[i];
-                let title = card.getAttribute('data-title');
-                let category = card.getAttribute('data-category');
-
-                let matchesSearch = title.includes(searchInput);
-                let matchesCategory = (currentCategory === 'all' || category === currentCategory);
-
-                if (matchesSearch && matchesCategory) {
-                    card.style.display = "flex";
-                } else {
-                    card.style.display = "none";
-                }
-            }
-        }
-
-        function resetFilter() {
-            document.getElementById('searchInput').value = '';
-            currentCategory = 'all';
-            let buttons = document.getElementsByClassName('cat-btn');
-            for(let b of buttons) b.classList.remove('active');
-            buttons[0].classList.add('active');
-            applyFilters();
-        }
-    </script>
 </body>
 </html>
