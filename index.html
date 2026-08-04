@@ -23,7 +23,18 @@
         }
         h1 { color: #e50914; font-size: 22px; font-weight: bold; cursor: pointer; }
         
-        /* مشغل الفيديو للمشاهدة */
+        .search-box input {
+            background: #333;
+            border: 1px solid #444;
+            padding: 8px 12px;
+            border-radius: 20px;
+            color: #fff;
+            outline: none;
+            font-size: 13px;
+            width: 140px;
+        }
+
+        /* مشغل الفيديو */
         .player-section {
             display: none;
             max-width: 900px;
@@ -31,19 +42,20 @@
             background: #222;
             padding: 15px;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(229, 9, 20, 0.3);
+            box-shadow: 0 4px 15px rgba(229, 9, 20, 0.4);
         }
         .player-section h2 { margin-bottom: 12px; font-size: 18px; color: #fff; }
         video { width: 100%; border-radius: 8px; background: #000; outline: none; }
         .close-btn {
-            background: #444; color: #fff; border: none; padding: 6px 15px; 
-            border-radius: 5px; cursor: pointer; margin-top: 10px; font-weight: bold;
+            background: #e50914; color: #fff; border: none; padding: 8px 18px; 
+            border-radius: 5px; cursor: pointer; margin-top: 12px; font-weight: bold;
+            font-size: 13px;
         }
 
         /* شبكة الأفلام */
         .movies-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 15px;
             max-width: 1000px;
             margin: 0 auto;
@@ -61,7 +73,8 @@
         .poster-wrapper {
             position: relative;
             width: 100%;
-            padding-top: 140%;
+            padding-top: 145%;
+            background: #1a1a1a;
         }
 
         .poster-wrapper img {
@@ -69,17 +82,18 @@
         }
 
         .rating {
-            position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.8);
-            color: #ffc107; padding: 3px 6px; border-radius: 5px; font-size: 12px; font-weight: bold;
+            position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.85);
+            color: #ffc107; padding: 3px 6px; border-radius: 5px; font-size: 11px; font-weight: bold;
+            z-index: 2;
         }
 
         .movie-info { padding: 10px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
-        .movie-title { font-size: 14px; font-weight: bold; margin-bottom: 5px; }
+        .movie-title { font-size: 13px; font-weight: bold; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .movie-meta { font-size: 11px; color: #aaa; margin-bottom: 10px; }
         
         .watch-btn {
             background: #e50914; color: #fff; border: none; text-align: center;
-            padding: 8px; border-radius: 6px; font-size: 13px; font-weight: bold; cursor: pointer; width: 100%;
+            padding: 7px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; width: 100%;
         }
         .watch-btn:hover { background: #b80710; }
     </style>
@@ -88,25 +102,29 @@
 
     <header>
         <h1 onclick="closePlayer()">🎬 إيجي أفلام</h1>
+        <div class="search-box">
+            <input type="text" id="searchInput" onkeyup="searchMovies()" placeholder="بحث عن فيلم...">
+        </div>
     </header>
 
-    <!-- قسم المشغل (بيفتح لما تضغط مشاهدة) -->
+    <!-- مشغل الفيديو -->
     <div id="playerSection" class="player-section">
         <h2 id="videoTitle">جاري المشاهدة...</h2>
-        <video id="mainVideo" controls poster="">
+        <video id="mainVideo" controls poster="https://picsum.photos/800/450">
             <source id="videoSource" src="" type="video/mp4">
             متصفحك لا يدعم التشغيل.
         </video>
-        <button class="close-btn" onclick="closePlayer()">✖ إغلاق المشغل</button>
+        <br>
+        <button class="close-btn" onclick="closePlayer()">إغلاق المشغل ✖</button>
     </div>
 
-    <!-- شبكة كروت الأفلام -->
-    <div class="movies-grid">
+    <!-- شبكة الأفلام -->
+    <div class="movies-grid" id="moviesGrid">
 
         <div class="movie-card">
             <div class="poster-wrapper">
                 <span class="rating">⭐ 8.8</span>
-                <img src="https://m.media-amazon.com/images/M/MVBMTk3MTM4NjI1Ml5BMl5BanBnXkFtZTcwMzE4MjA3Mw@@._V1_FMjpg_UX1000_.jpg" alt="Inception">
+                <img src="https://picsum.photos/id/1062/300/450" alt="Inception">
             </div>
             <div class="movie-info">
                 <div class="movie-title">Inception</div>
@@ -118,7 +136,7 @@
         <div class="movie-card">
             <div class="poster-wrapper">
                 <span class="rating">⭐ 9.0</span>
-                <img src="https://m.media-amazon.com/images/M/MVBMTMxMTQzNTU5MF5BMl5BanBnXkFtZTcwMDM4MjA0Mw@@._V1_.jpg" alt="The Dark Knight">
+                <img src="https://picsum.photos/id/1025/300/450" alt="The Dark Knight">
             </div>
             <div class="movie-info">
                 <div class="movie-title">The Dark Knight</div>
@@ -130,7 +148,7 @@
         <div class="movie-card">
             <div class="poster-wrapper">
                 <span class="rating">⭐ 8.6</span>
-                <img src="https://m.media-amazon.com/images/M/MVBNzA1Njg5NDM2N15BMl5BanBnXkFtZTgwNzA2NTM1MDM@._V1_.jpg" alt="Interstellar">
+                <img src="https://picsum.photos/id/1033/300/450" alt="Interstellar">
             </div>
             <div class="movie-info">
                 <div class="movie-title">Interstellar</div>
@@ -141,7 +159,6 @@
 
     </div>
 
-    <!-- كود الجافاسكربت لتشغيل الأفلام فوراً -->
     <script>
         function playMovie(title, url) {
             document.getElementById('videoTitle').innerText = "جاري مشاهدة: " + title;
@@ -158,6 +175,19 @@
             var video = document.getElementById('mainVideo');
             video.pause();
             document.getElementById('playerSection').style.display = 'none';
+        }
+
+        function searchMovies() {
+            var input = document.getElementById('searchInput').value.toLowerCase();
+            var cards = document.getElementsByClassName('movie-card');
+            for (var i = 0; i < cards.length; i++) {
+                var title = cards[i].querySelector('.movie-title').innerText.toLowerCase();
+                if (title.includes(input)) {
+                    cards[i].style.display = "flex";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
         }
     </script>
 </body>
