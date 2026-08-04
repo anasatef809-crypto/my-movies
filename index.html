@@ -45,7 +45,24 @@
             box-shadow: 0 4px 15px rgba(229, 9, 20, 0.4);
         }
         .player-section h2 { margin-bottom: 12px; font-size: 18px; color: #fff; }
-        video { width: 100%; border-radius: 8px; background: #000; outline: none; }
+        
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* نسبة 16:9 */
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            background: #000;
+        }
+        .video-container iframe, .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
         .close-btn {
             background: #e50914; color: #fff; border: none; padding: 8px 18px; 
             border-radius: 5px; cursor: pointer; margin-top: 12px; font-weight: bold;
@@ -110,50 +127,64 @@
     <!-- مشغل الفيديو -->
     <div id="playerSection" class="player-section">
         <h2 id="videoTitle">جاري المشاهدة...</h2>
-        <video id="mainVideo" controls poster="https://picsum.photos/800/450">
-            <source id="videoSource" src="" type="video/mp4">
-            متصفحك لا يدعم التشغيل.
-        </video>
-        <br>
+        <div class="video-container">
+            <iframe id="mainIframe" src="" allowfullscreen></iframe>
+        </div>
         <button class="close-btn" onclick="closePlayer()">إغلاق المشغل ✖</button>
     </div>
 
     <!-- شبكة الأفلام -->
     <div class="movies-grid" id="moviesGrid">
 
+        <!-- فيلم 1 -->
         <div class="movie-card">
             <div class="poster-wrapper">
                 <span class="rating">⭐ 8.8</span>
-                <img src="https://picsum.photos/id/1062/300/450" alt="Inception">
+                <img src="https://image.tmdb.org/t/p/w500/oYuLE1311o2R3B8R3S2L3y1a3s0.jpg" alt="Inception">
             </div>
             <div class="movie-info">
                 <div class="movie-title">Inception</div>
                 <div class="movie-meta">2010 • خيال علمي</div>
-                <button class="watch-btn" onclick="playMovie('Inception', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4')">مشاهدة الآن 🍿</button>
+                <button class="watch-btn" onclick="playMovie('Inception', 'https://vidsrc.me/embed/movie?imdb=tt1375666')">مشاهدة الآن 🍿</button>
             </div>
         </div>
 
+        <!-- فيلم 2 -->
         <div class="movie-card">
             <div class="poster-wrapper">
                 <span class="rating">⭐ 9.0</span>
-                <img src="https://picsum.photos/id/1025/300/450" alt="The Dark Knight">
+                <img src="https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6mEb398vKoE.jpg" alt="The Dark Knight">
             </div>
             <div class="movie-info">
                 <div class="movie-title">The Dark Knight</div>
                 <div class="movie-meta">2008 • أكشن</div>
-                <button class="watch-btn" onclick="playMovie('The Dark Knight', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4')">مشاهدة الآن 🍿</button>
+                <button class="watch-btn" onclick="playMovie('The Dark Knight', 'https://vidsrc.me/embed/movie?imdb=tt0468569')">مشاهدة الآن 🍿</button>
             </div>
         </div>
 
+        <!-- فيلم 3 -->
         <div class="movie-card">
             <div class="poster-wrapper">
                 <span class="rating">⭐ 8.6</span>
-                <img src="https://picsum.photos/id/1033/300/450" alt="Interstellar">
+                <img src="https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg" alt="Interstellar">
             </div>
             <div class="movie-info">
                 <div class="movie-title">Interstellar</div>
                 <div class="movie-meta">2014 • دراما / مغامرة</div>
-                <button class="watch-btn" onclick="playMovie('Interstellar', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4')">مشاهدة الآن 🍿</button>
+                <button class="watch-btn" onclick="playMovie('Interstellar', 'https://vidsrc.me/embed/movie?imdb=tt0816692')">مشاهدة الآن 🍿</button>
+            </div>
+        </div>
+
+        <!-- فيلم 4 -->
+        <div class="movie-card">
+            <div class="poster-wrapper">
+                <span class="rating">⭐ 8.4</span>
+                <img src="https://image.tmdb.org/t/p/w500/ulzhLuWrPK0331Y32K331yL1a0.jpg" alt="Avengers: Endgame">
+            </div>
+            <div class="movie-info">
+                <div class="movie-title">Avengers: Endgame</div>
+                <div class="movie-meta">2019 • أبطال خارقون</div>
+                <button class="watch-btn" onclick="playMovie('Avengers: Endgame', 'https://vidsrc.me/embed/movie?imdb=tt4154796')">مشاهدة الآن 🍿</button>
             </div>
         </div>
 
@@ -162,18 +193,15 @@
     <script>
         function playMovie(title, url) {
             document.getElementById('videoTitle').innerText = "جاري مشاهدة: " + title;
-            var video = document.getElementById('mainVideo');
-            var source = document.getElementById('videoSource');
-            source.src = url;
-            video.load();
+            var iframe = document.getElementById('mainIframe');
+            iframe.src = url;
             document.getElementById('playerSection').style.display = 'block';
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            video.play();
         }
 
         function closePlayer() {
-            var video = document.getElementById('mainVideo');
-            video.pause();
+            var iframe = document.getElementById('mainIframe');
+            iframe.src = "";
             document.getElementById('playerSection').style.display = 'none';
         }
 
