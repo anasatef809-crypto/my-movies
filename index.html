@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إيجي أفلام</title>
+    <title>إيجي أفلام - منصة المشاهدة المجانية</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
@@ -34,6 +34,7 @@
             width: 140px;
         }
 
+        /* مشغل الفيديو */
         .player-section {
             display: none;
             max-width: 900px;
@@ -47,15 +48,19 @@
         
         .video-container {
             position: relative;
-            padding-bottom: 56.25%;
+            padding-bottom: 56.25%; /* نسبة 16:9 */
             height: 0;
             overflow: hidden;
             border-radius: 8px;
             background: #000;
         }
-        .video-container iframe {
+        .video-container iframe, .video-container video {
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%; border: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
         }
 
         .close-btn {
@@ -64,6 +69,7 @@
             font-size: 13px;
         }
 
+        /* شبكة الأفلام */
         .movies-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -118,6 +124,7 @@
         </div>
     </header>
 
+    <!-- مشغل الفيديو -->
     <div id="playerSection" class="player-section">
         <h2 id="videoTitle">جاري المشاهدة...</h2>
         <div class="video-container">
@@ -126,57 +133,58 @@
         <button class="close-btn" onclick="closePlayer()">إغلاق المشغل ✖</button>
     </div>
 
+    <!-- شبكة الأفلام -->
     <div class="movies-grid" id="moviesGrid">
 
-        <!-- Inception -->
+        <!-- فيلم 1 -->
         <div class="movie-card">
             <div class="poster-wrapper">
                 <span class="rating">⭐ 8.8</span>
-                <img src="https://image.tmdb.org/t/p/w500/ljs2A82B33yVJ8pA39A2i9E90o8.jpg" alt="Inception">
+                <img src="https://image.tmdb.org/t/p/w500/oYuLE1311o2R3B8R3S2L3y1a3s0.jpg" alt="Inception">
             </div>
             <div class="movie-info">
                 <div class="movie-title">Inception</div>
                 <div class="movie-meta">2010 • خيال علمي</div>
-                <button class="watch-btn" onclick="playMovie('Inception', 'https://www.2embed.cc/embed/tt1375666')">مشاهدة الآن 🍿</button>
+                <button class="watch-btn" onclick="playMovie('Inception', 'https://vidsrc.me/embed/movie?imdb=tt1375666')">مشاهدة الآن 🍿</button>
             </div>
         </div>
 
-        <!-- The Dark Knight -->
+        <!-- فيلم 2 -->
         <div class="movie-card">
             <div class="poster-wrapper">
                 <span class="rating">⭐ 9.0</span>
-                <img src="https://image.tmdb.org/t/p/w500/qJ2tW6WM3L2i3M3342.jpg" alt="The Dark Knight" onerror="this.src='https://m.media-amazon.com/images/M/MVBMTMxMTQzNTU5MF5BMl5BanBnXkFtZTcwMDM4MjA0Mw@@._V1_.jpg'">
+                <img src="https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6mEb398vKoE.jpg" alt="The Dark Knight">
             </div>
             <div class="movie-info">
                 <div class="movie-title">The Dark Knight</div>
                 <div class="movie-meta">2008 • أكشن</div>
-                <button class="watch-btn" onclick="playMovie('The Dark Knight', 'https://www.2embed.cc/embed/tt0468569')">مشاهدة الآن 🍿</button>
+                <button class="watch-btn" onclick="playMovie('The Dark Knight', 'https://vidsrc.me/embed/movie?imdb=tt0468569')">مشاهدة الآن 🍿</button>
             </div>
         </div>
 
-        <!-- Interstellar -->
+        <!-- فيلم 3 -->
         <div class="movie-card">
             <div class="poster-wrapper">
                 <span class="rating">⭐ 8.6</span>
-                <img src="https://image.tmdb.org/t/p/w500/gEU2G3L321111.jpg" alt="Interstellar" onerror="this.src='https://m.media-amazon.com/images/M/MVBNzA1Njg5NDM2N15BMl5BanBnXkFtZTgwNzA2NTM1MDM@._V1_.jpg'">
+                <img src="https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg" alt="Interstellar">
             </div>
             <div class="movie-info">
                 <div class="movie-title">Interstellar</div>
-                <div class="movie-meta">2014 • دراما</div>
-                <button class="watch-btn" onclick="playMovie('Interstellar', 'https://www.2embed.cc/embed/tt0816692')">مشاهدة الآن 🍿</button>
+                <div class="movie-meta">2014 • دراما / مغامرة</div>
+                <button class="watch-btn" onclick="playMovie('Interstellar', 'https://vidsrc.me/embed/movie?imdb=tt0816692')">مشاهدة الآن 🍿</button>
             </div>
         </div>
 
-        <!-- Avengers: Endgame -->
+        <!-- فيلم 4 -->
         <div class="movie-card">
             <div class="poster-wrapper">
                 <span class="rating">⭐ 8.4</span>
-                <img src="https://image.tmdb.org/t/p/w500/or06ip3aP1111.jpg" alt="Avengers: Endgame" onerror="this.src='https://m.media-amazon.com/images/M/MVBMjMwMDM3NjU2NV5BMl5BanBnXkFtZTgwNzM5MDM1MDE@._V1_.jpg'">
+                <img src="https://image.tmdb.org/t/p/w500/ulzhLuWrPK0331Y32K331yL1a0.jpg" alt="Avengers: Endgame">
             </div>
             <div class="movie-info">
                 <div class="movie-title">Avengers: Endgame</div>
                 <div class="movie-meta">2019 • أبطال خارقون</div>
-                <button class="watch-btn" onclick="playMovie('Avengers: Endgame', 'https://www.2embed.cc/embed/tt4154796')">مشاهدة الآن 🍿</button>
+                <button class="watch-btn" onclick="playMovie('Avengers: Endgame', 'https://vidsrc.me/embed/movie?imdb=tt4154796')">مشاهدة الآن 🍿</button>
             </div>
         </div>
 
@@ -202,7 +210,11 @@
             var cards = document.getElementsByClassName('movie-card');
             for (var i = 0; i < cards.length; i++) {
                 var title = cards[i].querySelector('.movie-title').innerText.toLowerCase();
-                cards[i].style.display = title.includes(input) ? "flex" : "none";
+                if (title.includes(input)) {
+                    cards[i].style.display = "flex";
+                } else {
+                    cards[i].style.display = "none";
+                }
             }
         }
     </script>
