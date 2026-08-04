@@ -17,7 +17,6 @@
       padding-bottom: 40px;
     }
 
-    /* الهيدر وشريط البحث */
     header {
       background-color: #1e293b;
       padding: 15px 20px;
@@ -35,6 +34,7 @@
       font-weight: bold;
       color: #38bdf8;
       text-decoration: none;
+      cursor: pointer;
     }
     .search-box {
       width: 100%;
@@ -61,14 +61,13 @@
       font-weight: bold;
     }
 
-    /* أزرار التصنيفات */
     .categories-bar {
       display: flex;
       gap: 10px;
       overflow-x: auto;
       padding: 15px 20px;
       white-space: nowrap;
-      scrollbar-width: none; /* إخفاء شريط التمرير */
+      scrollbar-width: none;
     }
     .categories-bar::-webkit-scrollbar {
       display: none;
@@ -89,14 +88,12 @@
       border-color: #0284c7;
     }
 
-    /* عنوان القسم */
     .section-title {
       padding: 10px 20px;
       font-size: 1.2rem;
       color: #e2e8f0;
     }
 
-    /* شبكة العرض (Grid) */
     .movies-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -110,7 +107,6 @@
       }
     }
 
-    /* كارت الفيلم */
     .movie-card {
       background: #1e293b;
       border-radius: 10px;
@@ -160,29 +156,50 @@
       background: #0284c7;
       color: white;
       border: none;
-      padding: 6px;
+      padding: 8px;
       border-radius: 6px;
       cursor: pointer;
       font-weight: bold;
       font-size: 0.8rem;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
     }
     .watch-btn:hover {
       background: #0369a1;
+    }
+
+    /* زر تحميل المزيد */
+    .load-more-container {
+      text-align: center;
+      margin: 30px 0;
+    }
+    .load-more-btn {
+      background: #38bdf8;
+      color: #0f172a;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 25px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .load-more-btn:hover {
+      background: #7dd3fc;
     }
   </style>
 </head>
 <body>
 
-  <!-- الهيدر -->
   <header>
-    <a href="#" class="logo" onclick="loadPopular()">🎬 EgyMovies</a>
+    <a href="#" class="logo" onclick="resetAndLoadPopular()">🎬 EgyMovies</a>
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="ابحث عن فيلم أو مسلسل...">
-      <button onclick="searchMovies()">بحث</button>
+      <button onclick="triggerSearch()">بحث</button>
     </div>
   </header>
 
-  <!-- شريط التصنيفات (متحرك باللمس) -->
   <div class="categories-bar">
     <button class="cat-btn active" onclick="filterGenre('', this)">الأحدث 🍿</button>
     <button class="cat-btn" onclick="filterGenre('28', this)">أكشن 💥</button>
@@ -195,59 +212,90 @@
 
   <h2 class="section-title" id="sectionTitle">أحدث الأفلام والمسلسلات</h2>
 
-  <!-- شبكة الأفلام -->
   <div class="movies-grid" id="moviesContainer"></div>
+
+  <!-- زر تحميل المزيد -->
+  <div class="load-more-container">
+    <button class="load-more-btn" id="loadMoreBtn" onclick="loadNextPage()">تحميل المزيد من الأفلام ➕</button>
+  </div>
 
   <script>
     const API_KEY = 'b744cb3f771d51f1cdfa3be751901eb4';
     const BASE_URL = 'https://api.themoviedb.org/3';
     const IMAGE_URL = 'https://image.tmdb.org/t/p/w500';
 
-    // جلب الأفلام الشائعة
-    async function loadPopular() {
+    let currentPage = 1;
+    let currentGenre = '';
+    let currentSearch = '';
+
+    function resetAndLoadPopular() {
+      currentPage = 1;
+      currentGenre = '';
+      currentSearch = '';
+      document.getElementById('searchInput').value = '';
+      document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.cat-btn')[0].classList.add('active');
       document.getElementById('sectionTitle').innerText = 'أحدث الأفلام والمسلسلات';
-      fetchData(`${BASE_URL}/movie/popular?api_key=${API_KEY}&language=ar-SA`);
+      fetchData(`${BASE_URL}/discover/movie?api_key=${API_KEY}&language=ar-SA&sort_by=primary_release_date.desc&page=${currentPage}`, true);
     }
 
-    // الفلترة حسب التصنيف
     function filterGenre(genreId, btnElement) {
       document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
       btnElement.classList.add('active');
 
+      currentPage = 1;
+      currentGenre = genreId;
+      currentSearch = '';
+
       if (!genreId) {
-        loadPopular();
+        resetAndLoadPopular();
         return;
       }
       document.getElementById('sectionTitle').innerText = 'نتائج التصنيف';
-      fetchData(`${BASE_URL}/discover/movie?api_key=${API_KEY}&language=ar-SA&with_genres=${genreId}`);
+      fetchData(`${BASE_URL}/discover/movie?api_key=${API_KEY}&language=ar-SA&with_genres=${genreId}&sort_by=primary_release_date.desc&page=${currentPage}`, true);
     }
 
-    // دالة البحث
-    function searchMovies() {
+    function triggerSearch() {
       const query = document.getElementById('searchInput').value.trim();
       if (!query) return;
+      currentPage = 1;
+      currentSearch = query;
+      currentGenre = '';
       document.getElementById('sectionTitle').innerText = `نتائج البحث عن: ${query}`;
-      fetchData(`${BASE_URL}/search/movie?api_key=${API_KEY}&language=ar-SA&query=${encodeURIComponent(query)}`);
+      fetchData(`${BASE_URL}/search/movie?api_key=${API_KEY}&language=ar-SA&query=${encodeURIComponent(query)}&page=${currentPage}`, true);
     }
 
-    // جلب البيانات وعرضها
-    async function fetchData(url) {
+    function loadNextPage() {
+      currentPage++;
+      let url = '';
+      if (currentSearch) {
+        url = `${BASE_URL}/search/movie?api_key=${API_KEY}&language=ar-SA&query=${encodeURIComponent(currentSearch)}&page=${currentPage}`;
+      } else if (currentGenre) {
+        url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&language=ar-SA&with_genres=${currentGenre}&sort_by=primary_release_date.desc&page=${currentPage}`;
+      } else {
+        url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&language=ar-SA&sort_by=primary_release_date.desc&page=${currentPage}`;
+      }
+      fetchData(url, false);
+    }
+
+    async function fetchData(url, clearExisting = false) {
       try {
         const response = await fetch(url);
         const data = await response.json();
-        displayMovies(data.results);
+        displayMovies(data.results, clearExisting);
       } catch (error) {
         console.error('Error:', error);
       }
     }
 
-    // طباعة الكروت
-    function displayMovies(movies) {
+    function displayMovies(movies, clearExisting = false) {
       const container = document.getElementById('moviesContainer');
-      container.innerHTML = '';
+      if (clearExisting) container.innerHTML = '';
 
       if (!movies || movies.length === 0) {
-        container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #94a3b8;">لم يتم العثور على أي نتائج 😅</p>';
+        if (clearExisting) {
+          container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #94a3b8;">لم يتم العثور على نتائج 😅</p>';
+        }
         return;
       }
 
@@ -255,6 +303,9 @@
         const posterPath = movie.poster_path ? `${IMAGE_URL}${movie.poster_path}` : 'https://via.placeholder.com/500x750?text=No+Image';
         const rating = movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A';
         const releaseYear = movie.release_date ? movie.release_date.split('-')[0] : '';
+        
+        // رابط المشاهدة المجاني عبر السيرفر الخارجي (vidsrc)
+        const watchUrl = `https://vidsrc.to/embed/movie/${movie.id}`;
 
         const movieCard = `
           <div class="movie-card">
@@ -263,7 +314,7 @@
             <div class="movie-info">
               <h3>${movie.title}</h3>
               <p>${releaseYear}</p>
-              <button class="watch-btn">مشاهدة الآن 🍿</button>
+              <a href="${watchUrl}" target="_blank" class="watch-btn">مشاهدة الآن 🍿</a>
             </div>
           </div>
         `;
@@ -271,8 +322,8 @@
       });
     }
 
-    // التشغيل التلقائي عند التحميل
-    document.addEventListener('DOMContentLoaded', loadPopular);
+    document.addEventListener('DOMContentLoaded', resetAndLoadPopular);
   </script>
 </body>
 </html>
+
