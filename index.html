@@ -1,329 +1,81 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EgyMovies - موقع الأفلام والمسلسلات</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      background-color: #0f172a;
-      color: #fff;
-      font-family: system-ui, -apple-system, sans-serif;
-      padding-bottom: 40px;
-    }
+// تاريخ اليوم لمنع الأفلام القادمة في المستقبل (مثل 2038)
+const TODAY = new Date().toISOString().split('T')[0];
 
-    header {
-      background-color: #1e293b;
-      padding: 15px 20px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      align-items: center;
-    }
-    .logo {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #38bdf8;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    .search-box {
-      width: 100%;
-      max-width: 500px;
-      display: flex;
-      gap: 8px;
-    }
-    .search-box input {
-      flex: 1;
-      padding: 10px 14px;
-      border-radius: 8px;
-      border: 1px solid #334155;
-      background: #0f172a;
-      color: #fff;
-      outline: none;
-    }
-    .search-box button {
-      padding: 10px 16px;
-      background: #0284c7;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-    }
+function resetAndLoadPopular() {
+  currentPage = 1;
+  currentGenre = '';
+  currentSearch = '';
+  document.getElementById('searchInput').value = '';
+  document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.cat-btn')[0].classList.add('active');
+  document.getElementById('sectionTitle').innerText = 'أحدث الأفلام والمسلسلات المعروضة';
+  
+  // لطلب الأفلام الصادرة حتى تاريخ اليوم فقط، مرتبة بالأحدث
+  fetchData(`${BASE_URL}/discover/movie?api_key=${API_KEY}&language=ar-SA&sort_by=primary_release_date.desc&primary_release_date.lte=${TODAY}&page=${currentPage}`, true);
+}
 
-    .categories-bar {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      padding: 15px 20px;
-      white-space: nowrap;
-      scrollbar-width: none;
-    }
-    .categories-bar::-webkit-scrollbar {
-      display: none;
-    }
-    .cat-btn {
-      background: #1e293b;
-      color: #94a3b8;
-      border: 1px solid #334155;
-      padding: 8px 16px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: all 0.2s;
-    }
-    .cat-btn.active, .cat-btn:hover {
-      background: #0284c7;
-      color: #fff;
-      border-color: #0284c7;
-    }
+function filterGenre(genreId, btnElement) {
+  document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+  btnElement.classList.add('active');
 
-    .section-title {
-      padding: 10px 20px;
-      font-size: 1.2rem;
-      color: #e2e8f0;
+  currentPage = 1;
+  currentGenre = genreId;
+  currentSearch = '';
+
+  if (!genreId) {
+    resetAndLoadPopular();
+    return;
+  }
+  document.getElementById('sectionTitle').innerText = 'نتائج التصنيف';
+  fetchData(`${BASE_URL}/discover/movie?api_key=${API_KEY}&language=ar-SA&with_genres=${genreId}&sort_by=primary_release_date.desc&primary_release_date.lte=${TODAY}&page=${currentPage}`, true);
+}
+
+function loadNextPage() {
+  currentPage++;
+  let url = '';
+  if (currentSearch) {
+    url = `${BASE_URL}/search/movie?api_key=${API_KEY}&language=ar-SA&query=${encodeURIComponent(currentSearch)}&page=${currentPage}`;
+  } else if (currentGenre) {
+    url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&language=ar-SA&with_genres=${currentGenre}&sort_by=primary_release_date.desc&primary_release_date.lte=${TODAY}&page=${currentPage}`;
+  } else {
+    url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&language=ar-SA&sort_by=primary_release_date.desc&primary_release_date.lte=${TODAY}&page=${currentPage}`;
+  }
+  fetchData(url, false);
+}
+
+function displayMovies(movies, clearExisting = false) {
+  const container = document.getElementById('moviesContainer');
+  if (clearExisting) container.innerHTML = '';
+
+  if (!movies || movies.length === 0) {
+    if (clearExisting) {
+      container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #94a3b8;">لم يتم العثور على نتائج 😅</p>';
     }
+    return;
+  }
 
-    .movies-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      padding: 10px 20px;
-    }
-    @media (min-width: 600px) {
-      .movies-grid {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-        gap: 20px;
-      }
-    }
+  movies.forEach(movie => {
+    // تتجاهل الأفلام التي لا تملك بوستر رسمي
+    if(!movie.poster_path) return;
 
-    .movie-card {
-      background: #1e293b;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-    }
-    .movie-card img {
-      width: 100%;
-      height: 230px;
-      object-fit: cover;
-    }
-    .rating-badge {
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      background: rgba(0, 0, 0, 0.8);
-      color: #facc15;
-      padding: 3px 6px;
-      border-radius: 6px;
-      font-weight: bold;
-      font-size: 0.75rem;
-    }
-    .movie-info {
-      padding: 10px;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .movie-info h3 {
-      margin: 0 0 4px 0;
-      font-size: 0.85rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .movie-info p {
-      margin: 0 0 8px 0;
-      color: #94a3b8;
-      font-size: 0.75rem;
-    }
-    .watch-btn {
-      width: 100%;
-      background: #0284c7;
-      color: white;
-      border: none;
-      padding: 8px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 0.8rem;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
-    }
-    .watch-btn:hover {
-      background: #0369a1;
-    }
+    const posterPath = `${IMAGE_URL}${movie.poster_path}`;
+    const rating = movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A';
+    const releaseYear = movie.release_date ? movie.release_date.split('-')[0] : '';
+    
+    // سيرفر مشاهدة أكثر استقراراً للأفلام المتاحة
+    const watchUrl = `https://vidsrc.cc/v2/embed/movie/${movie.id}`;
 
-    /* زر تحميل المزيد */
-    .load-more-container {
-      text-align: center;
-      margin: 30px 0;
-    }
-    .load-more-btn {
-      background: #38bdf8;
-      color: #0f172a;
-      border: none;
-      padding: 12px 28px;
-      border-radius: 25px;
-      font-weight: bold;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .load-more-btn:hover {
-      background: #7dd3fc;
-    }
-  </style>
-</head>
-<body>
-
-  <header>
-    <a href="#" class="logo" onclick="resetAndLoadPopular()">🎬 EgyMovies</a>
-    <div class="search-box">
-      <input type="text" id="searchInput" placeholder="ابحث عن فيلم أو مسلسل...">
-      <button onclick="triggerSearch()">بحث</button>
-    </div>
-  </header>
-
-  <div class="categories-bar">
-    <button class="cat-btn active" onclick="filterGenre('', this)">الأحدث 🍿</button>
-    <button class="cat-btn" onclick="filterGenre('28', this)">أكشن 💥</button>
-    <button class="cat-btn" onclick="filterGenre('35', this)">كوميدي 🎭</button>
-    <button class="cat-btn" onclick="filterGenre('27', this)">رعب 👻</button>
-    <button class="cat-btn" onclick="filterGenre('10749', this)">رومانسي ❤️</button>
-    <button class="cat-btn" onclick="filterGenre('878', this)">خيال علمي 🚀</button>
-    <button class="cat-btn" onclick="filterGenre('16', this)">انيميشن 🎨</button>
-  </div>
-
-  <h2 class="section-title" id="sectionTitle">أحدث الأفلام والمسلسلات</h2>
-
-  <div class="movies-grid" id="moviesContainer"></div>
-
-  <!-- زر تحميل المزيد -->
-  <div class="load-more-container">
-    <button class="load-more-btn" id="loadMoreBtn" onclick="loadNextPage()">تحميل المزيد من الأفلام ➕</button>
-  </div>
-
-  <script>
-    const API_KEY = 'b744cb3f771d51f1cdfa3be751901eb4';
-    const BASE_URL = 'https://api.themoviedb.org/3';
-    const IMAGE_URL = 'https://image.tmdb.org/t/p/w500';
-
-    let currentPage = 1;
-    let currentGenre = '';
-    let currentSearch = '';
-
-    function resetAndLoadPopular() {
-      currentPage = 1;
-      currentGenre = '';
-      currentSearch = '';
-      document.getElementById('searchInput').value = '';
-      document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-      document.querySelectorAll('.cat-btn')[0].classList.add('active');
-      document.getElementById('sectionTitle').innerText = 'أحدث الأفلام والمسلسلات';
-      fetchData(`${BASE_URL}/discover/movie?api_key=${API_KEY}&language=ar-SA&sort_by=primary_release_date.desc&page=${currentPage}`, true);
-    }
-
-    function filterGenre(genreId, btnElement) {
-      document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-      btnElement.classList.add('active');
-
-      currentPage = 1;
-      currentGenre = genreId;
-      currentSearch = '';
-
-      if (!genreId) {
-        resetAndLoadPopular();
-        return;
-      }
-      document.getElementById('sectionTitle').innerText = 'نتائج التصنيف';
-      fetchData(`${BASE_URL}/discover/movie?api_key=${API_KEY}&language=ar-SA&with_genres=${genreId}&sort_by=primary_release_date.desc&page=${currentPage}`, true);
-    }
-
-    function triggerSearch() {
-      const query = document.getElementById('searchInput').value.trim();
-      if (!query) return;
-      currentPage = 1;
-      currentSearch = query;
-      currentGenre = '';
-      document.getElementById('sectionTitle').innerText = `نتائج البحث عن: ${query}`;
-      fetchData(`${BASE_URL}/search/movie?api_key=${API_KEY}&language=ar-SA&query=${encodeURIComponent(query)}&page=${currentPage}`, true);
-    }
-
-    function loadNextPage() {
-      currentPage++;
-      let url = '';
-      if (currentSearch) {
-        url = `${BASE_URL}/search/movie?api_key=${API_KEY}&language=ar-SA&query=${encodeURIComponent(currentSearch)}&page=${currentPage}`;
-      } else if (currentGenre) {
-        url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&language=ar-SA&with_genres=${currentGenre}&sort_by=primary_release_date.desc&page=${currentPage}`;
-      } else {
-        url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&language=ar-SA&sort_by=primary_release_date.desc&page=${currentPage}`;
-      }
-      fetchData(url, false);
-    }
-
-    async function fetchData(url, clearExisting = false) {
-      try {
-        const response = await fetch(url);
-        const data = await response.json();
-        displayMovies(data.results, clearExisting);
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    }
-
-    function displayMovies(movies, clearExisting = false) {
-      const container = document.getElementById('moviesContainer');
-      if (clearExisting) container.innerHTML = '';
-
-      if (!movies || movies.length === 0) {
-        if (clearExisting) {
-          container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #94a3b8;">لم يتم العثور على نتائج 😅</p>';
-        }
-        return;
-      }
-
-      movies.forEach(movie => {
-        const posterPath = movie.poster_path ? `${IMAGE_URL}${movie.poster_path}` : 'https://via.placeholder.com/500x750?text=No+Image';
-        const rating = movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A';
-        const releaseYear = movie.release_date ? movie.release_date.split('-')[0] : '';
-        
-        // رابط المشاهدة المجاني عبر السيرفر الخارجي (vidsrc)
-        const watchUrl = `https://vidsrc.to/embed/movie/${movie.id}`;
-
-        const movieCard = `
-          <div class="movie-card">
-            <div class="rating-badge">★ ${rating}</div>
-            <img src="${posterPath}" alt="${movie.title}" loading="lazy">
-            <div class="movie-info">
-              <h3>${movie.title}</h3>
-              <p>${releaseYear}</p>
-              <a href="${watchUrl}" target="_blank" class="watch-btn">مشاهدة الآن 🍿</a>
-            </div>
-          </div>
-        `;
-        container.insertAdjacentHTML('beforeend', movieCard);
-      });
-    }
-
-    document.addEventListener('DOMContentLoaded', resetAndLoadPopular);
-  </script>
-</body>
-</html>
-
+    const movieCard = `
+      <div class="movie-card">
+        <div class="rating-badge">★ ${rating}</div>
+        <img src="${posterPath}" alt="${movie.title}" loading="lazy">
+        <div class="movie-info">
+          <h3>${movie.title}</h3>
+          <p>${releaseYear}</p>
+          <a href="${watchUrl}" target="_blank" class="watch-btn">مشاهدة الآن 🍿</a>
+        </div>
+      </div>
+    `;
+    container.insertAdjacentHTML('beforeend', movieCard);
+  });
+}
