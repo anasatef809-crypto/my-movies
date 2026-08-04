@@ -54,7 +54,7 @@
             border-radius: 8px;
             background: #000;
         }
-        .video-container iframe, .video-container video {
+        .video-container iframe {
             position: absolute;
             top: 0;
             left: 0;
@@ -128,8 +128,7 @@
     <div id="playerSection" class="player-section">
         <h2 id="videoTitle">جاري المشاهدة...</h2>
         <div class="video-container">
-            <!-- حماية sandbox تمنع الإعلانات وتحويلات الصفحات -->
-            <iframe id="mainIframe" src="" allowfullscreen sandbox="allow-scripts allow-same-origin"></iframe>
+            <iframe id="mainIframe" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
         </div>
         <button class="close-btn" onclick="closePlayer()">إغلاق المشغل ✖</button>
     </div>
@@ -141,12 +140,12 @@
         <div class="movie-card">
             <div class="poster-wrapper">
                 <span class="rating">⭐ 8.8</span>
-                <img src="https://m.media-amazon.com/images/M/MVBMTk3MTM4NjI1Ml5BMl5BanBnXkFtZTcwMzE4MjA3Mw@@._V1_.jpg" alt="Inception">
+                <img src="https://images.justwatch.com/poster/8548777/s392/inception.jpg" alt="Inception">
             </div>
             <div class="movie-info">
                 <div class="movie-title">Inception</div>
                 <div class="movie-meta">2010 • خيال علمي</div>
-                <button class="watch-btn" onclick="playMovie('Inception', 'https://vidsrc.me/embed/movie?imdb=tt1375666')">مشاهدة الآن 🍿</button>
+                <button class="watch-btn" onclick="playMovie('Inception', 'https://vidsrc.to/embed/movie/tt1375666')">مشاهدة الآن 🍿</button>
             </div>
         </div>
 
@@ -154,12 +153,12 @@
         <div class="movie-card">
             <div class="poster-wrapper">
                 <span class="rating">⭐ 9.0</span>
-                <img src="https://m.media-amazon.com/images/M/MVBMTMxMTQzNTU5MF5BMl5BanBnXkFtZTcwMDM4MjA0Mw@@._V1_.jpg" alt="The Dark Knight">
+                <img src="https://images.justwatch.com/poster/240544257/s392/the-dark-knight.jpg" alt="The Dark Knight">
             </div>
             <div class="movie-info">
                 <div class="movie-title">The Dark Knight</div>
                 <div class="movie-meta">2008 • أكشن</div>
-                <button class="watch-btn" onclick="playMovie('The Dark Knight', 'https://vidsrc.me/embed/movie?imdb=tt0468569')">مشاهدة الآن 🍿</button>
+                <button class="watch-btn" onclick="playMovie('The Dark Knight', 'https://vidsrc.to/embed/movie/tt0468569')">مشاهدة الآن 🍿</button>
             </div>
         </div>
 
@@ -167,12 +166,12 @@
         <div class="movie-card">
             <div class="poster-wrapper">
                 <span class="rating">⭐ 8.6</span>
-                <img src="https://m.media-amazon.com/images/M/MVBNzA1Njg5NDM2N15BMl5BanBnXkFtZTgwNzA2NTM1MDM@._V1_.jpg" alt="Interstellar">
+                <img src="https://images.justwatch.com/poster/8592393/s392/interstellar.jpg" alt="Interstellar">
             </div>
             <div class="movie-info">
                 <div class="movie-title">Interstellar</div>
                 <div class="movie-meta">2014 • دراما / مغامرة</div>
-                <button class="watch-btn" onclick="playMovie('Interstellar', 'https://vidsrc.me/embed/movie?imdb=tt0816692')">مشاهدة الآن 🍿</button>
+                <button class="watch-btn" onclick="playMovie('Interstellar', 'https://vidsrc.to/embed/movie/tt0816692')">مشاهدة الآن 🍿</button>
             </div>
         </div>
 
@@ -180,12 +179,12 @@
         <div class="movie-card">
             <div class="poster-wrapper">
                 <span class="rating">⭐ 8.4</span>
-                <img src="https://m.media-amazon.com/images/M/MVBMjMwMDM3NjU2NV5BMl5BanBnXkFtZTgwNzM5MDM1MDE@._V1_.jpg" alt="Avengers: Endgame">
+                <img src="https://images.justwatch.com/poster/123011317/s392/avengers-endgame.jpg" alt="Avengers: Endgame">
             </div>
             <div class="movie-info">
                 <div class="movie-title">Avengers: Endgame</div>
                 <div class="movie-meta">2019 • أبطال خارقون</div>
-                <button class="watch-btn" onclick="playMovie('Avengers: Endgame', 'https://vidsrc.me/embed/movie?imdb=tt4154796')">مشاهدة الآن 🍿</button>
+                <button class="watch-btn" onclick="playMovie('Avengers: Endgame', 'https://vidsrc.to/embed/movie/tt4154796')">مشاهدة الآن 🍿</button>
             </div>
         </div>
 
