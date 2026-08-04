@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إيجي أفلام - مكتبة الأفلام والمسلسلات</title>
+    <title>إيجي أفلام - منصة المشاهدة المجانية</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
@@ -13,7 +13,6 @@
             padding: 20px 15px; 
         }
         
-        /* الهيدر */
         header { 
             display: flex;
             justify-content: space-between;
@@ -22,18 +21,23 @@
             border-bottom: 2px solid #e50914; 
             padding-bottom: 15px; 
         }
-        h1 { color: #e50914; font-size: 22px; font-weight: bold; }
+        h1 { color: #e50914; font-size: 22px; font-weight: bold; cursor: pointer; }
         
-        /* شريط البحث */
-        .search-box input {
-            background: #333;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 20px;
-            color: #fff;
-            outline: none;
-            font-size: 14px;
-            width: 140px;
+        /* مشغل الفيديو للمشاهدة */
+        .player-section {
+            display: none;
+            max-width: 900px;
+            margin: 0 auto 30px auto;
+            background: #222;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(229, 9, 20, 0.3);
+        }
+        .player-section h2 { margin-bottom: 12px; font-size: 18px; color: #fff; }
+        video { width: 100%; border-radius: 8px; background: #000; outline: none; }
+        .close-btn {
+            background: #444; color: #fff; border: none; padding: 6px 15px; 
+            border-radius: 5px; cursor: pointer; margin-top: 10px; font-weight: bold;
         }
 
         /* شبكة الأفلام */
@@ -45,105 +49,60 @@
             margin: 0 auto;
         }
 
-        /* كارت الفيلم */
         .movie-card {
             background: #222;
             border-radius: 10px;
             overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s;
             display: flex;
             flex-direction: column;
             position: relative;
         }
 
-        .movie-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(229, 9, 20, 0.4);
-        }
-
-        /* صورة البوستر */
         .poster-wrapper {
             position: relative;
             width: 100%;
-            padding-top: 140%; /* نسبة البوستر */
+            padding-top: 140%;
         }
 
         .poster-wrapper img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;
         }
 
-        /* تقييم الفيلم */
         .rating {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: rgba(0, 0, 0, 0.8);
-            color: #ffc107;
-            padding: 3px 6px;
-            border-radius: 5px;
-            font-size: 12px;
-            font-weight: bold;
+            position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.8);
+            color: #ffc107; padding: 3px 6px; border-radius: 5px; font-size: 12px; font-weight: bold;
         }
 
-        /* تفاصيل الفيلم */
-        .movie-info {
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            justify-content: space-between;
-        }
-
-        .movie-title {
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 5px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .movie-meta {
-            font-size: 11px;
-            color: #aaa;
-            margin-bottom: 10px;
-        }
-
-        /* زر المشاهدة */
+        .movie-info { padding: 10px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
+        .movie-title { font-size: 14px; font-weight: bold; margin-bottom: 5px; }
+        .movie-meta { font-size: 11px; color: #aaa; margin-bottom: 10px; }
+        
         .watch-btn {
-            background: #e50914;
-            color: #fff;
-            text-decoration: none;
-            text-align: center;
-            padding: 6px;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: bold;
-            display: block;
+            background: #e50914; color: #fff; border: none; text-align: center;
+            padding: 8px; border-radius: 6px; font-size: 13px; font-weight: bold; cursor: pointer; width: 100%;
         }
-
-        .watch-btn:hover {
-            background: #b80710;
-        }
+        .watch-btn:hover { background: #b80710; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>🎬 إيجي أفلام</h1>
-        <div class="search-box">
-            <input type="text" placeholder="بحث عن فيلم...">
-        </div>
+        <h1 onclick="closePlayer()">🎬 إيجي أفلام</h1>
     </header>
 
+    <!-- قسم المشغل (بيفتح لما تضغط مشاهدة) -->
+    <div id="playerSection" class="player-section">
+        <h2 id="videoTitle">جاري المشاهدة...</h2>
+        <video id="mainVideo" controls poster="">
+            <source id="videoSource" src="" type="video/mp4">
+            متصفحك لا يدعم التشغيل.
+        </video>
+        <button class="close-btn" onclick="closePlayer()">✖ إغلاق المشغل</button>
+    </div>
+
+    <!-- شبكة كروت الأفلام -->
     <div class="movies-grid">
 
-        <!-- كارت 1 -->
         <div class="movie-card">
             <div class="poster-wrapper">
                 <span class="rating">⭐ 8.8</span>
@@ -151,12 +110,11 @@
             </div>
             <div class="movie-info">
                 <div class="movie-title">Inception</div>
-                <div class="movie-meta">2010 • أجهزة / خيال علمي</div>
-                <a href="#" class="watch-btn">مشاهدة الآن</a>
+                <div class="movie-meta">2010 • خيال علمي</div>
+                <button class="watch-btn" onclick="playMovie('Inception', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4')">مشاهدة الآن 🍿</button>
             </div>
         </div>
 
-        <!-- كارت 2 -->
         <div class="movie-card">
             <div class="poster-wrapper">
                 <span class="rating">⭐ 9.0</span>
@@ -164,12 +122,11 @@
             </div>
             <div class="movie-info">
                 <div class="movie-title">The Dark Knight</div>
-                <div class="movie-meta">2008 • أكشن / جريمة</div>
-                <a href="#" class="watch-btn">مشاهدة الآن</a>
+                <div class="movie-meta">2008 • أكشن</div>
+                <button class="watch-btn" onclick="playMovie('The Dark Knight', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4')">مشاهدة الآن 🍿</button>
             </div>
         </div>
 
-        <!-- كارت 3 -->
         <div class="movie-card">
             <div class="poster-wrapper">
                 <span class="rating">⭐ 8.6</span>
@@ -177,25 +134,31 @@
             </div>
             <div class="movie-info">
                 <div class="movie-title">Interstellar</div>
-                <div class="movie-meta">2014 • مغامرة / دراما</div>
-                <a href="#" class="watch-btn">مشاهدة الآن</a>
-            </div>
-        </div>
-
-        <!-- كارت 4 -->
-        <div class="movie-card">
-            <div class="poster-wrapper">
-                <span class="rating">⭐ 8.5</span>
-                <img src="https://m.media-amazon.com/images/M/MVBMjMwMDM3NjU2NV5BMl5BanBnXkFtZTgwNzM5MDM1MDE@._V1_.jpg" alt="Avengers: Endgame">
-            </div>
-            <div class="movie-info">
-                <div class="movie-title">Avengers: Endgame</div>
-                <div class="movie-meta">2019 • أبطال خارقون</div>
-                <a href="#" class="watch-btn">مشاهدة الآن</a>
+                <div class="movie-meta">2014 • دراما / مغامرة</div>
+                <button class="watch-btn" onclick="playMovie('Interstellar', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4')">مشاهدة الآن 🍿</button>
             </div>
         </div>
 
     </div>
 
+    <!-- كود الجافاسكربت لتشغيل الأفلام فوراً -->
+    <script>
+        function playMovie(title, url) {
+            document.getElementById('videoTitle').innerText = "جاري مشاهدة: " + title;
+            var video = document.getElementById('mainVideo');
+            var source = document.getElementById('videoSource');
+            source.src = url;
+            video.load();
+            document.getElementById('playerSection').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            video.play();
+        }
+
+        function closePlayer() {
+            var video = document.getElementById('mainVideo');
+            video.pause();
+            document.getElementById('playerSection').style.display = 'none';
+        }
+    </script>
 </body>
 </html>
