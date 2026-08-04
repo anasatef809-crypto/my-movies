@@ -3,32 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة الأفلام والمسلسلات</title>
+    <title>إيجي أفلام - مكتبة الأفلام والمسلسلات</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: #141414; color: #fff; font-family: system-ui, -apple-system, sans-serif; padding: 20px; text-align: center; }
-        header { margin-bottom: 30px; border-bottom: 2px solid #e50914; padding-bottom: 15px; }
-        h1 { color: #e50914; font-size: 28px; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .card { background: #222; border-radius: 12px; padding: 15px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        .card h2 { margin-bottom: 15px; font-size: 20px; color: #fff; }
-        video { width: 100%; border-radius: 8px; outline: none; background: #000; }
+        body { 
+            background-color: #141414; 
+            color: #fff; 
+            font-family: system-ui, -apple-system, sans-serif; 
+            padding: 20px 15px; 
+        }
+        
+        /* الهيدر */
+        header { 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px; 
+            border-bottom: 2px solid #e50914; 
+            padding-bottom: 15px; 
+        }
+        h1 { color: #e50914; font-size: 22px; font-weight: bold; }
+        
+        /* شريط البحث */
+        .search-box input {
+            background: #333;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            color: #fff;
+            outline: none;
+            font-size: 14px;
+            width: 140px;
+        }
+
+        /* شبكة الأفلام */
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* كارت الفيلم */
+        .movie-card {
+            background: #222;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(229, 9, 20, 0.4);
+        }
+
+        /* صورة البوستر */
+        .poster-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 140%; /* نسبة البوستر */
+        }
+
+        .poster-wrapper img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* تقييم الفيلم */
+        .rating {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #ffc107;
+            padding: 3px 6px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* تفاصيل الفيلم */
+        .movie-info {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+        }
+
+        .movie-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .movie-meta {
+            font-size: 11px;
+            color: #aaa;
+            margin-bottom: 10px;
+        }
+
+        /* زر المشاهدة */
+        .watch-btn {
+            background: #e50914;
+            color: #fff;
+            text-decoration: none;
+            text-align: center;
+            padding: 6px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+            display: block;
+        }
+
+        .watch-btn:hover {
+            background: #b80710;
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>🎬 إيجي أفلام - المشاهدة المجانية</h1>
+        <h1>🎬 إيجي أفلام</h1>
+        <div class="search-box">
+            <input type="text" placeholder="بحث عن فيلم...">
+        </div>
     </header>
 
-    <div class="container">
-        <div class="card">
-            <h2>فيديو تجريبي (مشغل مباشر)</h2>
-            <video controls poster="https://via.placeholder.com/800x450/000000/FFFFFF?text=Click+Play">
-                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
-                متصفحك لا يدعم تشغيل الفيديو.
-            </video>
+    <div class="movies-grid">
+
+        <!-- كارت 1 -->
+        <div class="movie-card">
+            <div class="poster-wrapper">
+                <span class="rating">⭐ 8.8</span>
+                <img src="https://m.media-amazon.com/images/M/MVBMTk3MTM4NjI1Ml5BMl5BanBnXkFtZTcwMzE4MjA3Mw@@._V1_FMjpg_UX1000_.jpg" alt="Inception">
+            </div>
+            <div class="movie-info">
+                <div class="movie-title">Inception</div>
+                <div class="movie-meta">2010 • أجهزة / خيال علمي</div>
+                <a href="#" class="watch-btn">مشاهدة الآن</a>
+            </div>
         </div>
+
+        <!-- كارت 2 -->
+        <div class="movie-card">
+            <div class="poster-wrapper">
+                <span class="rating">⭐ 9.0</span>
+                <img src="https://m.media-amazon.com/images/M/MVBMTMxMTQzNTU5MF5BMl5BanBnXkFtZTcwMDM4MjA0Mw@@._V1_.jpg" alt="The Dark Knight">
+            </div>
+            <div class="movie-info">
+                <div class="movie-title">The Dark Knight</div>
+                <div class="movie-meta">2008 • أكشن / جريمة</div>
+                <a href="#" class="watch-btn">مشاهدة الآن</a>
+            </div>
+        </div>
+
+        <!-- كارت 3 -->
+        <div class="movie-card">
+            <div class="poster-wrapper">
+                <span class="rating">⭐ 8.6</span>
+                <img src="https://m.media-amazon.com/images/M/MVBNzA1Njg5NDM2N15BMl5BanBnXkFtZTgwNzA2NTM1MDM@._V1_.jpg" alt="Interstellar">
+            </div>
+            <div class="movie-info">
+                <div class="movie-title">Interstellar</div>
+                <div class="movie-meta">2014 • مغامرة / دراما</div>
+                <a href="#" class="watch-btn">مشاهدة الآن</a>
+            </div>
+        </div>
+
+        <!-- كارت 4 -->
+        <div class="movie-card">
+            <div class="poster-wrapper">
+                <span class="rating">⭐ 8.5</span>
+                <img src="https://m.media-amazon.com/images/M/MVBMjMwMDM3NjU2NV5BMl5BanBnXkFtZTgwNzM5MDM1MDE@._V1_.jpg" alt="Avengers: Endgame">
+            </div>
+            <div class="movie-info">
+                <div class="movie-title">Avengers: Endgame</div>
+                <div class="movie-meta">2019 • أبطال خارقون</div>
+                <a href="#" class="watch-btn">مشاهدة الآن</a>
+            </div>
+        </div>
+
     </div>
 
 </body>
