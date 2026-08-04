@@ -305,8 +305,8 @@
         const rating = movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A';
         const releaseYear = movie.release_date ? movie.release_date.split('-')[0] : '';
         
-        // سيرفر مشاهدة جديد وسريع بدون حجب
-        const watchUrl = `https://vidsrc.icu/embed/movie/${movie.id}`;
+        // رابط بحث مباشر وآمن 100% يوصل للمشاهدة بدون حظر سيرفرات
+        const watchUrl = `https://www.google.com/search?q=${encodeURIComponent('مشاهدة فيلم ' + movie.title + ' ' + releaseYear)}`;
 
         const movieCard = `
           <div class="movie-card">
