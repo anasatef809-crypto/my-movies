@@ -128,7 +128,8 @@
     <div id="playerSection" class="player-section">
         <h2 id="videoTitle">جاري المشاهدة...</h2>
         <div class="video-container">
-            <iframe id="mainIframe" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+            <!-- sandbox يمنع فتح النوافذ المنبثقة الإعلانية بدون كسر الفيديو -->
+            <iframe id="mainIframe" src="" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
         </div>
         <button class="close-btn" onclick="closePlayer()">إغلاق المشغل ✖</button>
     </div>
@@ -140,7 +141,7 @@
         <div class="movie-card">
             <div class="poster-wrapper">
                 <span class="rating">⭐ 8.8</span>
-                <img src="https://images.justwatch.com/poster/8548777/s392/inception.jpg" alt="Inception">
+                <img src="https://upload.wikimedia.org/wikipedia/en/2/2e/Inception_%282010%29_theatrical_poster.jpg" alt="Inception">
             </div>
             <div class="movie-info">
                 <div class="movie-title">Inception</div>
@@ -153,7 +154,7 @@
         <div class="movie-card">
             <div class="poster-wrapper">
                 <span class="rating">⭐ 9.0</span>
-                <img src="https://images.justwatch.com/poster/240544257/s392/the-dark-knight.jpg" alt="The Dark Knight">
+                <img src="https://upload.wikimedia.org/wikipedia/en/1/1c/The_Dark_Knight_%282008_film%29_poster.jpg" alt="The Dark Knight">
             </div>
             <div class="movie-info">
                 <div class="movie-title">The Dark Knight</div>
@@ -166,7 +167,7 @@
         <div class="movie-card">
             <div class="poster-wrapper">
                 <span class="rating">⭐ 8.6</span>
-                <img src="https://images.justwatch.com/poster/8592393/s392/interstellar.jpg" alt="Interstellar">
+                <img src="https://upload.wikimedia.org/wikipedia/en/b/bc/Interstellar_film_poster.jpg" alt="Interstellar">
             </div>
             <div class="movie-info">
                 <div class="movie-title">Interstellar</div>
@@ -179,7 +180,7 @@
         <div class="movie-card">
             <div class="poster-wrapper">
                 <span class="rating">⭐ 8.4</span>
-                <img src="https://images.justwatch.com/poster/123011317/s392/avengers-endgame.jpg" alt="Avengers: Endgame">
+                <img src="https://upload.wikimedia.org/wikipedia/en/0/0d/Avengers_Endgame_poster.jpg" alt="Avengers: Endgame">
             </div>
             <div class="movie-info">
                 <div class="movie-title">Avengers: Endgame</div>
