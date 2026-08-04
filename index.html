@@ -305,8 +305,8 @@
         const rating = movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A';
         const releaseYear = movie.release_date ? movie.release_date.split('-')[0] : '';
         
-        // رابط سيرفر البث المباشر المستقر 
-        const watchUrl = `https://vidsrc.me/embed/movie?tmdb=${movie.id}`;
+        // سيرفر مشاهدة جديد وسريع بدون حجب
+        const watchUrl = `https://vidsrc.icu/embed/movie/${movie.id}`;
 
         const movieCard = `
           <div class="movie-card">
