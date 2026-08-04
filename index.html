@@ -17,9 +17,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px; 
+            margin-bottom: 20px; 
             border-bottom: 2px solid #e50914; 
             padding-bottom: 15px; 
+            flex-wrap: wrap;
+            gap: 10px;
         }
         h1 { color: #e50914; font-size: 22px; font-weight: bold; cursor: pointer; }
         
@@ -31,7 +33,32 @@
             color: #fff;
             outline: none;
             font-size: 13px;
-            width: 140px;
+            width: 160px;
+        }
+
+        /* شريط التصنيفات */
+        .categories {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+        .cat-btn {
+            background: #222;
+            color: #aaa;
+            border: 1px solid #444;
+            padding: 6px 14px;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: 0.3s;
+        }
+        .cat-btn.active, .cat-btn:hover {
+            background: #e50914;
+            color: #fff;
+            border-color: #e50914;
         }
 
         /* مشغل الفيديو */
@@ -48,19 +75,14 @@
         
         .video-container {
             position: relative;
-            padding-bottom: 56.25%; /* نسبة 16:9 */
+            padding-bottom: 56.25%;
             height: 0;
             overflow: hidden;
             border-radius: 8px;
             background: #000;
         }
-        .video-container iframe, .video-container video {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
+        .video-container iframe {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
         }
 
         .close-btn {
@@ -92,16 +114,35 @@
             width: 100%;
             padding-top: 145%;
             background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
         }
 
         .poster-wrapper img {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;
         }
+        
+        /* بديل مرئي في حال لم تظهر الصورة يكتب اسم الفيلم بوضوح */
+        .poster-fallback {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(135deg, #2c3e50, #000);
+            z-index: 1;
+        }
 
         .rating {
             position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.85);
             color: #ffc107; padding: 3px 6px; border-radius: 5px; font-size: 11px; font-weight: bold;
-            z-index: 2;
+            z-index: 3;
         }
 
         .movie-info { padding: 10px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
@@ -118,11 +159,19 @@
 <body>
 
     <header>
-        <h1 onclick="closePlayer()">🎬 إيجي أفلام</h1>
+        <h1 onclick="resetFilter()">🎬 إيجي أفلام</h1>
         <div class="search-box">
-            <input type="text" id="searchInput" onkeyup="searchMovies()" placeholder="بحث عن فيلم...">
+            <input type="text" id="searchInput" onkeyup="filterMovies()" placeholder="بحث عن فيلم...">
         </div>
     </header>
+
+    <!-- شريط التصنيفات -->
+    <div class="categories">
+        <button class="cat-btn active" onclick="filterCategory('all', this)">الكل</button>
+        <button class="cat-btn" onclick="filterCategory('scifi', this)">خيال علمي</button>
+        <button class="cat-btn" onclick="filterCategory('action', this)">أكشن</button>
+        <button class="cat-btn" onclick="filterCategory('drama', this)">دراما</button>
+    </div>
 
     <!-- مشغل الفيديو -->
     <div id="playerSection" class="player-section">
@@ -137,10 +186,11 @@
     <div class="movies-grid" id="moviesGrid">
 
         <!-- فيلم 1 -->
-        <div class="movie-card">
+        <div class="movie-card" data-category="scifi" data-title="inception">
             <div class="poster-wrapper">
+                <div class="poster-fallback">Inception</div>
+                <img src="https://image.tmdb.org/t/p/w500/oYuLE1311o2R3B8R3S2L3y1a3s0.jpg" alt="Inception" onerror="this.style.display='none'">
                 <span class="rating">⭐ 8.8</span>
-                <img src="https://image.tmdb.org/t/p/w500/oYuLE1311o2R3B8R3S2L3y1a3s0.jpg" onerror="this.src='https://images.justwatch.com/poster/8548777/s392/inception.jpg'" alt="Inception">
             </div>
             <div class="movie-info">
                 <div class="movie-title">Inception</div>
@@ -150,10 +200,11 @@
         </div>
 
         <!-- فيلم 2 -->
-        <div class="movie-card">
+        <div class="movie-card" data-category="action" data-title="the dark knight">
             <div class="poster-wrapper">
+                <div class="poster-fallback">The Dark Knight</div>
+                <img src="https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6mEb398vKoE.jpg" alt="The Dark Knight" onerror="this.style.display='none'">
                 <span class="rating">⭐ 9.0</span>
-                <img src="https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6mEb398vKoE.jpg" onerror="this.src='https://images.justwatch.com/poster/240544257/s392/the-dark-knight.jpg'" alt="The Dark Knight">
             </div>
             <div class="movie-info">
                 <div class="movie-title">The Dark Knight</div>
@@ -163,23 +214,25 @@
         </div>
 
         <!-- فيلم 3 -->
-        <div class="movie-card">
+        <div class="movie-card" data-category="drama" data-title="interstellar">
             <div class="poster-wrapper">
+                <div class="poster-fallback">Interstellar</div>
+                <img src="https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg" alt="Interstellar" onerror="this.style.display='none'">
                 <span class="rating">⭐ 8.6</span>
-                <img src="https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg" onerror="this.src='https://images.justwatch.com/poster/8592393/s392/interstellar.jpg'" alt="Interstellar">
             </div>
             <div class="movie-info">
                 <div class="movie-title">Interstellar</div>
-                <div class="movie-meta">2014 • دراما / مغامرة</div>
+                <div class="movie-meta">2014 • دراما</div>
                 <button class="watch-btn" onclick="playMovie('Interstellar', 'https://vidsrc.me/embed/movie?imdb=tt0816692')">مشاهدة الآن 🍿</button>
             </div>
         </div>
 
         <!-- فيلم 4 -->
-        <div class="movie-card">
+        <div class="movie-card" data-category="action" data-title="avengers: endgame">
             <div class="poster-wrapper">
+                <div class="poster-fallback">Avengers: Endgame</div>
+                <img src="https://image.tmdb.org/t/p/w500/ulzhLuWrPK0331Y32K331yL1a0.jpg" alt="Avengers: Endgame" onerror="this.style.display='none'">
                 <span class="rating">⭐ 8.4</span>
-                <img src="https://image.tmdb.org/t/p/w500/ulzhLuWrPK0331Y32K331yL1a0.jpg" onerror="this.src='https://images.justwatch.com/poster/123011317/s392/avengers-endgame.jpg'" alt="Avengers: Endgame">
             </div>
             <div class="movie-info">
                 <div class="movie-title">Avengers: Endgame</div>
@@ -191,6 +244,8 @@
     </div>
 
     <script>
+        let currentCategory = 'all';
+
         function playMovie(title, url) {
             document.getElementById('videoTitle').innerText = "جاري مشاهدة: " + title;
             var iframe = document.getElementById('mainIframe');
@@ -205,17 +260,48 @@
             document.getElementById('playerSection').style.display = 'none';
         }
 
-        function searchMovies() {
-            var input = document.getElementById('searchInput').value.toLowerCase();
-            var cards = document.getElementsByClassName('movie-card');
-            for (var i = 0; i < cards.length; i++) {
-                var title = cards[i].querySelector('.movie-title').innerText.toLowerCase();
-                if (title.includes(input)) {
-                    cards[i].style.display = "flex";
+        function filterCategory(category, btn) {
+            currentCategory = category;
+            
+            // تحديث الأزرار النشطة
+            let buttons = document.getElementsByClassName('cat-btn');
+            for(let b of buttons) b.classList.remove('active');
+            btn.classList.add('active');
+
+            applyFilters();
+        }
+
+        function filterMovies() {
+            applyFilters();
+        }
+
+        function applyFilters() {
+            let searchInput = document.getElementById('searchInput').value.toLowerCase();
+            let cards = document.getElementsByClassName('movie-card');
+
+            for (let i = 0; i < cards.length; i++) {
+                let card = cards[i];
+                let title = card.getAttribute('data-title');
+                let category = card.getAttribute('data-category');
+
+                let matchesSearch = title.includes(searchInput);
+                let matchesCategory = (currentCategory === 'all' || category === currentCategory);
+
+                if (matchesSearch && matchesCategory) {
+                    card.style.display = "flex";
                 } else {
-                    cards[i].style.display = "none";
+                    card.style.display = "none";
                 }
             }
+        }
+
+        function resetFilter() {
+            document.getElementById('searchInput').value = '';
+            currentCategory = 'all';
+            let buttons = document.getElementsByClassName('cat-btn');
+            for(let b of buttons) b.classList.remove('active');
+            buttons[0].classList.add('active');
+            applyFilters();
         }
     </script>
 </body>
