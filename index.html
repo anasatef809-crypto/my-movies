@@ -108,6 +108,7 @@
             background: #e50914; color: #fff; border: none; text-align: center;
             padding: 7px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; width: 100%;
         }
+        .watch-btn:hover { background: #b80710; }
     </style>
 </head>
 <body>
@@ -122,6 +123,7 @@
     <div id="playerSection" class="player-section">
         <h2 id="videoTitle">جاري المشاهدة...</h2>
         <div class="video-container">
+            <!-- رجعنا المشغل المباشر الكامل بدون sandbox عشان الفيلم يشتغل كااامل -->
             <iframe id="mainIframe" src="" allowfullscreen></iframe>
         </div>
         <button class="close-btn" onclick="closePlayer()">إغلاق المشغل ✖</button>
@@ -133,12 +135,12 @@
         <div class="movie-card">
             <div class="poster-wrapper">
                 <span class="rating">⭐ 8.8</span>
-                <img src="https://m.media-amazon.com/images/M/MVBMTk3MTM4NjI1Ml5BMl5BanBnXkFtZTcwMzE4MjA3Mw@@._V1_FMjpg_UX1000_.jpg" alt="Inception" referrerpolicy="no-referrer">
+                <img src="https://images.weserv.nl/?url=m.media-amazon.com/images/M/MVBMTk3MTM4NjI1Ml5BMl5BanBnXkFtZTcwMzE4MjA3Mw@@._V1_.jpg" alt="Inception">
             </div>
             <div class="movie-info">
                 <div class="movie-title">Inception</div>
                 <div class="movie-meta">2010 • خيال علمي</div>
-                <button class="watch-btn" onclick="playMovie('Inception', 'https://www.youtube.com/embed/YoHD9XEInc0')">عرض التريلر / مشاهدة 🍿</button>
+                <button class="watch-btn" onclick="playMovie('Inception', 'https://vidsrc.xyz/embed/movie/tt1375666')">مشاهدة الآن 🍿</button>
             </div>
         </div>
 
@@ -146,12 +148,12 @@
         <div class="movie-card">
             <div class="poster-wrapper">
                 <span class="rating">⭐ 9.0</span>
-                <img src="https://m.media-amazon.com/images/M/MVBMTMxMTQzNTU5MF5BMl5BanBnXkFtZTcwMDM4MjA0Mw@@._V1_FMjpg_UX1000_.jpg" alt="The Dark Knight" referrerpolicy="no-referrer">
+                <img src="https://images.weserv.nl/?url=m.media-amazon.com/images/M/MVBMTMxMTQzNTU5MF5BMl5BanBnXkFtZTcwMDM4MjA0Mw@@._V1_.jpg" alt="The Dark Knight">
             </div>
             <div class="movie-info">
                 <div class="movie-title">The Dark Knight</div>
                 <div class="movie-meta">2008 • أكشن</div>
-                <button class="watch-btn" onclick="playMovie('The Dark Knight', 'https://www.youtube.com/embed/EXeTwQWrcwY')">عرض التريلر / مشاهدة 🍿</button>
+                <button class="watch-btn" onclick="playMovie('The Dark Knight', 'https://vidsrc.xyz/embed/movie/tt0468569')">مشاهدة الآن 🍿</button>
             </div>
         </div>
 
@@ -159,12 +161,12 @@
         <div class="movie-card">
             <div class="poster-wrapper">
                 <span class="rating">⭐ 8.6</span>
-                <img src="https://m.media-amazon.com/images/M/MVBNzA1Njg5NDM2N15BMl5BanBnXkFtZTgwNzA2NTM1MDM@._V1_FMjpg_UX1000_.jpg" alt="Interstellar" referrerpolicy="no-referrer">
+                <img src="https://images.weserv.nl/?url=m.media-amazon.com/images/M/MVBNzA1Njg5NDM2N15BMl5BanBnXkFtZTgwNzA2NTM1MDM@._V1_.jpg" alt="Interstellar">
             </div>
             <div class="movie-info">
                 <div class="movie-title">Interstellar</div>
                 <div class="movie-meta">2014 • دراما</div>
-                <button class="watch-btn" onclick="playMovie('Interstellar', 'https://www.youtube.com/embed/zSWdZVtXT7E')">عرض التريلر / مشاهدة 🍿</button>
+                <button class="watch-btn" onclick="playMovie('Interstellar', 'https://vidsrc.xyz/embed/movie/tt0816692')">مشاهدة الآن 🍿</button>
             </div>
         </div>
 
@@ -172,12 +174,12 @@
         <div class="movie-card">
             <div class="poster-wrapper">
                 <span class="rating">⭐ 8.4</span>
-                <img src="https://m.media-amazon.com/images/M/MVBMjMwMDM3NjU2NV5BMl5BanBnXkFtZTgwNzM5MDM1MDE@._V1_FMjpg_UX1000_.jpg" alt="Avengers: Endgame" referrerpolicy="no-referrer">
+                <img src="https://images.weserv.nl/?url=m.media-amazon.com/images/M/MVBMjMwMDM3NjU2NV5BMl5BanBnXkFtZTgwNzM5MDM1MDE@._V1_.jpg" alt="Avengers: Endgame">
             </div>
             <div class="movie-info">
                 <div class="movie-title">Avengers: Endgame</div>
                 <div class="movie-meta">2019 • أبطال خارقون</div>
-                <button class="watch-btn" onclick="playMovie('Avengers: Endgame', 'https://www.youtube.com/embed/TcMBFSGVi1c')">عرض التريلر / مشاهدة 🍿</button>
+                <button class="watch-btn" onclick="playMovie('Avengers: Endgame', 'https://vidsrc.xyz/embed/movie/tt4154796')">مشاهدة الآن 🍿</button>
             </div>
         </div>
 
@@ -185,7 +187,7 @@
 
     <script>
         function playMovie(title, url) {
-            document.getElementById('videoTitle').innerText = "جاري عرض: " + title;
+            document.getElementById('videoTitle').innerText = "جاري مشاهدة: " + title;
             var iframe = document.getElementById('mainIframe');
             iframe.src = url;
             document.getElementById('playerSection').style.display = 'block';
@@ -209,3 +211,4 @@
     </script>
 </body>
 </html>
+
